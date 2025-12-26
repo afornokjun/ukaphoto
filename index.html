@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动态按钮页面</title>
+  <style>
+    /* 基础样式，让按钮更美观 */
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+    .custom-button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .custom-button:hover {
+      background-color: #3367d6;
+    }
+    .error-message {
+      color: #d93025;
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center;">动态生成按钮</h1>
+  <!-- 按钮容器 -->
+  <div class="button-container" id="buttonContainer"></div>
+
+  <script>
+    // 异步读取JSON文件并生成按钮
+    async function loadButtons() {
+      const buttonContainer = document.getElementById('buttonContainer');
+      try {
+        // 读取JSON文件（注意文件路径要和HTML文件同级）
+        const response = await fetch('buttons.json');
+        // 检查请求是否成功
+        if (!response.ok) {
+          throw new Error(`请求失败：${response.status}`);
+        }
+        const data = await response.json();
+        
+        // 检查JSON是否包含buttons数组
+        if (!data.buttons || !Array.isArray(data.buttons)) {
+          throw new Error("JSON文件格式错误，缺少buttons数组");
+        }
+
+        // 遍历buttons数组生成按钮
+        data.buttons.forEach(buttonInfo => {
+          // 检查每个按钮是否有name和link
+          if (!buttonInfo.name || !buttonInfo.link) {
+            console.warn(`跳过无效按钮配置：${JSON.stringify(buttonInfo)}`);
+            return;
+          }
+          // 创建按钮元素
+          const button = document.createElement('button');
+          button.className = 'custom-button';
+          button.textContent = buttonInfo.name;
+          // 绑定点击事件（跳转到指定链接）
+          button.addEventListener('click', () => {
+            window.open(buttonInfo.link, '_blank'); // _blank表示新标签页打开
+          });
+          // 将按钮添加到容器
+          buttonContainer.appendChild(button);
+        });
+
+      } catch (error) {
+        // 显示错误信息
+        buttonContainer.innerHTML = `<div class="error-message">加载按钮失败：${error.message}</div>`;
+        console.error("加载按钮出错：", error);
+      }
+    }
+
+    // 页面加载完成后执行
+    window.onload = loadButtons;
+  </script>
+</body>
+</html>
