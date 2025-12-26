@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>动态按钮页面</title>
+  <title>photo</title>
   <style>
-    /* 基础样式，让按钮更美观 */
+    /* 基礎樣式，讓按鈕更美觀 */
     body {
       font-family: Arial, sans-serif;
       max-width: 800px;
@@ -40,55 +40,55 @@
   </style>
 </head>
 <body>
-  <h1 style="text-align: center;">动态生成按钮</h1>
-  <!-- 按钮容器 -->
+  <h1 style="text-align: center;">動態生成按鈕</h1>
+  <!-- 按鈕容器 -->
   <div class="button-container" id="buttonContainer"></div>
 
   <script>
-    // 异步读取JSON文件并生成按钮
+    // 非同步讀取JSON檔案並生成按鈕
     async function loadButtons() {
       const buttonContainer = document.getElementById('buttonContainer');
       try {
-        // 读取JSON文件（注意文件路径要和HTML文件同级）
+        // 讀取JSON檔案（注意檔案路徑要和HTML檔案同層）
         const response = await fetch('buttons.json');
-        // 检查请求是否成功
+        // 檢查請求是否成功
         if (!response.ok) {
-          throw new Error(`请求失败：${response.status}`);
+          throw new Error(`請求失敗：${response.status}`);
         }
         const data = await response.json();
         
-        // 检查JSON是否包含buttons数组
+        // 檢查JSON是否包含buttons陣列
         if (!data.buttons || !Array.isArray(data.buttons)) {
-          throw new Error("JSON文件格式错误，缺少buttons数组");
+          throw new Error("JSON檔案格式錯誤，缺少buttons陣列");
         }
 
-        // 遍历buttons数组生成按钮
+        // 遍歷buttons陣列生成按鈕
         data.buttons.forEach(buttonInfo => {
-          // 检查每个按钮是否有name和link
+          // 檢查每個按鈕是否有name和link
           if (!buttonInfo.name || !buttonInfo.link) {
-            console.warn(`跳过无效按钮配置：${JSON.stringify(buttonInfo)}`);
+            console.warn(`跳過無效按鈕設定：${JSON.stringify(buttonInfo)}`);
             return;
           }
-          // 创建按钮元素
+          // 建立按鈕元素
           const button = document.createElement('button');
           button.className = 'custom-button';
           button.textContent = buttonInfo.name;
-          // 绑定点击事件（跳转到指定链接）
+          // 綁定點擊事件（跳轉到指定連結）
           button.addEventListener('click', () => {
-            window.open(buttonInfo.link, '_blank'); // _blank表示新标签页打开
+            window.open(buttonInfo.link, '_blank'); // _blank表示新分頁開啟
           });
-          // 将按钮添加到容器
+          // 將按鈕加入容器
           buttonContainer.appendChild(button);
         });
 
       } catch (error) {
-        // 显示错误信息
-        buttonContainer.innerHTML = `<div class="error-message">加载按钮失败：${error.message}</div>`;
-        console.error("加载按钮出错：", error);
+        // 顯示錯誤資訊
+        buttonContainer.innerHTML = `<div class="error-message">載入按鈕失敗：${error.message}</div>`;
+        console.error("載入按鈕出錯：", error);
       }
     }
 
-    // 页面加载完成后执行
+    // 頁面載入完成後執行
     window.onload = loadButtons;
   </script>
 </body>
