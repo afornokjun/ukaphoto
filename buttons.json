@@ -1,0 +1,20 @@
+{
+  "buttons": [
+    {
+      "name": "2025-12-塔石木馬",
+      "link": "https://2025ukaphoto.vercel.app/"
+    },
+    {
+      "name": "谷歌",
+      "link": "https://www.google.com"
+    },
+    {
+      "name": "GitHub",
+      "link": "https://github.com"
+    },
+    {
+      "name": "知乎",
+      "link": "https://www.zhihu.com"
+    }
+  ]
+}
